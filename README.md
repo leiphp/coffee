@@ -1,11 +1,11 @@
 # phpsystem
-:ox:laravel5.8+swoole+vue技术架构打造一套全新PHP项目系统  
+:ox:laravel6.0.0+swoole+vue技术架构打造一套全新PHP项目系统  
 
 ### 服务器要求  
 Laravel 框架对 PHP 版本和必需扩展有一定要求，不过这些要求 Laravel Homestead 虚拟机都已经满足了，所以强烈推荐使用它作为 Laravel 本地集成开发环境。  
 
 不过，如果你没有使用 Homestead 的话，那么就需要确认自己的环境满足以下要求：  
-- PHP >= 7.1.3  
+- PHP >= 7.2.0  
 - PHP OpenSSL 扩展  
 - PHP PDO 扩展  
 - PHP Mbstring 扩展  
