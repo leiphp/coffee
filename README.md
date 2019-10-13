@@ -27,4 +27,21 @@ Laravel 使用 Composer 管理依赖，所以，安装之前确保已经在机�
  
  ### 开发环境 
   * PHP框架 `laravel6.0.0`
-  * 开发环境Homestead [详细教程](https://xueyuanjun.com/post/19915.html)   
+  * 开发环境Homestead [详细教程](https://xueyuanjun.com/post/19915.html) 
+  
+ ### 开发步骤  
+   #### 构建前后端分离项目  
+     第一步：清理默认安装配置  
+        由于我们构建的是基于 API 驱动的应用，所以有些自带的代码、文件及目录是不需要的：
+          
+         移除 app/Http/Controllers/Auth 目录，我们将通过 Socialite 重构用户认证功能
+         移除 resources/views/welcome.blade.php 文件，这个是默认的欢迎页面，我们呢不需要它
+     
+     第二步：新增目录
+      由于我们构建的是单页面应用（SPA），所以在整个应用中只需要两个视图即可！我们会通过 VueJS 组件和 Vue Router 来处理多个页面，因此所需要的只是一个可以展示 SPA 视图以及一个登录视图：
+      
+      新增 resources/views/app.blade.php 视图文件
+      新增 resources/views/login.blade.php 视图文件
+      
+   #### Laravel高性能，项目实战Swoole篇  
+      待续
