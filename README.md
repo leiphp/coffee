@@ -38,7 +38,8 @@ Laravel 使用 Composer 管理依赖，所以，安装之前确保已经在机�
          移除 resources/views/welcome.blade.php 文件，这个是默认的欢迎页面，我们呢不需要它
      
      第二步：新增目录
-      由于我们构建的是单页面应用（SPA），所以在整个应用中只需要两个视图即可！我们会通过 VueJS 组件和 Vue Router 来处理多个页面，因此所需要的只是一个可以展示 SPA 视图以及一个登录视图：
+      由于我们构建的是单页面应用（SPA），所以在整个应用中只需要两个视图即可！我们会通过 VueJS 组件和 Vue Router 来处理多个页面
+      因此所需要的只是一个可以展示 SPA 视图以及一个登录视图：
       
       新增 resources/views/app.blade.php 视图文件
       新增 resources/views/login.blade.php 视图文件
