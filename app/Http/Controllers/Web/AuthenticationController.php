@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use App\User;
+use Auth;
 use App\Http\Controllers\Controller;
 
 class AuthenticationController extends Controller
