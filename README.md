@@ -42,7 +42,11 @@ Laravel 使用 Composer 管理依赖，所以，安装之前确保已经在机�
       因此所需要的只是一个可以展示 SPA 视图以及一个登录视图：
       
       新增 resources/views/app.blade.php 视图文件
-      新增 resources/views/login.blade.php 视图文件
+      新增 resources/views/login.blade.php 视图文件 
+       
+     第三步：Github 的用户认证
+       如果运行报错：Class 'App\Http\Controllers\Web\Socialite' not found  
+       在控制器加上：use Laravel\Socialite\Facades\Socialite;  
       
    #### Laravel高性能，项目实战Swoole篇  
       待续
