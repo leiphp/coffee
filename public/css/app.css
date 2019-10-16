@@ -12,6 +12,15 @@
  */
 
 /**
+ * 2: Components
+ */
+
+span.validation {
+  color: red;
+  display: block;
+}
+
+/**
  * Foundation for Sites by ZURB
  * Version 6.5.3
  * foundation.zurb.com

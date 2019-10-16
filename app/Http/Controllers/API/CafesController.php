@@ -11,6 +11,7 @@ namespace app\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Request;
 use App\Models\Cafe;
+use App\Http\Requests\StoreCafeRequest;
 
 class CafesController extends Controller
 {
@@ -25,14 +26,14 @@ class CafesController extends Controller
         return response()->json($cafe);
     }
 
-    public function postNewCafe(){
+    public function postNewCafe(StoreCafeRequest $request){
         $cafe = new Cafe();
 
-        $cafe->name     = Request::get('name');
-        $cafe->address  = Request::get('address');
-        $cafe->city     = Request::get('city');
-        $cafe->state    = Request::get('state');
-        $cafe->zip      = Request::get('zip');
+        $cafe->name     = $request->input('name');
+        $cafe->address  = $request->input('address');
+        $cafe->city     = $request->input('city');
+        $cafe->state    = $request->input('state');
+        $cafe->zip      = $request->input('zip');
         $cafe->latitude = 0;
         $cafe->longitude= 0;
         $cafe->save();
