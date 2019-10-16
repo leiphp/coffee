@@ -34,7 +34,8 @@ if (token) {
 
 import Vue from 'vue';
 import router from './routes.js'
+import store from './store.js'
 
 new Vue({
-    router
+    router,store
 }).$mount('#app')

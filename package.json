@@ -12,6 +12,7 @@
     "devDependencies": {
         "axios": "^0.19",
         "cross-env": "^5.1",
+        "es6-promise": "^4.2.8",
         "foundation-sites": "^6.5.3",
         "jquery": "^3.4.1",
         "laravel-mix": "^4.0.7",
