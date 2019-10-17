@@ -65,4 +65,9 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
      | API描述: 获取应用中的所有冲泡方法
     */
     Route::get('/brew-methods', 'API\BrewMethodsController@getBrewMethods');
+
+    // 喜欢咖啡店
+    Route::post('/cafes/{id}/like', 'API\CafesController@postLikeCafe');
+    // 取消喜欢咖啡店
+    Route::delete('/cafes/{id}/like', 'API\CafesController@deleteLikeCafe');
 });

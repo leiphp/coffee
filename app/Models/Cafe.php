@@ -21,4 +21,14 @@ class Cafe extends Model
     {
         return $this->hasOne(Cafe::class, 'id', 'parent');
     }
+    // 与 User 间的多对对关联
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id');
+    }
+
+    public function userLike()
+    {
+        return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id')->where('user_id', auth()->id());
+    }
 }
