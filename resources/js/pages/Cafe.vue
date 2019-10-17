@@ -80,7 +80,7 @@
                             <div class="tags-container">
                                 <div class="grid-x grid-padding-x">
                                     <div class="large-12 medium-12 small-12 cell">
-                                        <span class="tag" v-for="tag in cafe.tags">#{{ tag.tag }}</span>
+                                        <span class="tag" v-for="tag in cafe.tags">#{{ tag.name }}</span>
                                     </div>
                                 </div>
                             </div>
