@@ -44317,11 +44317,26 @@ var render = function() {
           "li",
           [
             _c("router-link", { attrs: { to: { name: "cafes" } } }, [
-              _vm._v("\n                    Cafes\n                ")
+              _vm._v("\n                Cafes\n            ")
             ])
           ],
           1
         )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "right" }, [
+        _c("img", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.userLoadStatus == 2,
+              expression: "userLoadStatus == 2"
+            }
+          ],
+          staticClass: "avatar",
+          attrs: { src: _vm.user.avatar }
+        })
       ])
     ],
     1

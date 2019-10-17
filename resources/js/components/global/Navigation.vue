@@ -74,9 +74,9 @@
             </li>
         </ul>
 
-<!--        <div class="right">-->
-<!--            <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2"/>-->
-<!--        </div>-->
+        <div class="right">
+            <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2"/>
+        </div>
 
     </nav>
 </template>
