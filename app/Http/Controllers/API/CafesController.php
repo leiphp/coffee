@@ -17,14 +17,16 @@ use App\Utilities\GaodeMaps;
 class CafesController extends Controller
 {
 
-    public function getCafes(){
-        $cafes = Cafe::all();
-        return response()->json($cafes);
+    public function getCafes()
+    {
+        $cafes = Cafe::with('brewMethods')->get();
+        return response()->json( $cafes );
     }
 
-    public function getCafe($id){
-        $cafe = Cafe::where('id', '=', $id)->first();
-        return response()->json($cafe);
+    public function getCafe($id)
+    {
+        $cafe = Cafe::where('id', '=', $id)->with('brewMethods')->first();
+        return response()->json( $cafe );
     }
 
     public function postNewCafe(StoreCafeRequest $request){
