@@ -1879,7 +1879,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      markers: []
+      markers: [],
+      infoWindows: []
     };
   },
   mounted: function mounted() {
@@ -1914,8 +1915,18 @@ __webpack_require__.r(__webpack_exports__);
         var marker = new AMap.Marker({
           position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longitude)),
           title: this.cafes[i].name,
-          icon: icon // 通过 icon 对象设置自定义点标记图标来替代默认蓝色图标
+          icon: icon,
+          // 通过 icon 对象设置自定义点标记图标来替代默认蓝色图标
+          map: this.map
+        }); // 为每个咖啡店创建信息窗体
 
+        var infoWindow = new AMap.InfoWindow({
+          content: this.cafes[i].name
+        });
+        this.infoWindows.push(infoWindow); // 绑定点击事件到点标记对象，点击打开上面创建的信息窗体
+
+        marker.on('click', function () {
+          infoWindow.open(this.getMap(), this.getPosition());
         }); // 将每个点标记放到点标记数组中
 
         this.markers.push(marker);
