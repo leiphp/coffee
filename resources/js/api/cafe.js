@@ -20,14 +20,14 @@ export default {
     /**
      * POST /api/v1/cafes
      */
-    postAddNewCafe: function( name, address, city, state, zip ){
-        return axios.post( ROAST_CONFIG.API_URL + '/cafes',
+    postAddNewCafe: function (name, locations, website, description, roaster) {
+        return axios.post(ROAST_CONFIG.API_URL + '/cafes',
             {
                 name: name,
-                address: address,
-                city: city,
-                state: state,
-                zip: zip
+                locations: locations,
+                website: website,
+                description: description,
+                roaster: roaster
             }
         );
     }
