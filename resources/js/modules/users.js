@@ -3,6 +3,7 @@
  | VUEX modules/users.js
  |-------------------------------------------------------------------------------
  | The Vuex data store for the users
+ | this.$store.dispatch( 'loadUser' );调用store仓库里面的action;commmit调用仓库的mutations
  */
 
 import UserAPI from '../api/user.js';
@@ -26,6 +27,7 @@ export const users = {
 
             UserAPI.getUser()
                 .then(function (response) {
+                    console.log('user response',response)
                     commit('setUser', response.data);
                     commit('setUserLoadStatus', 2);
                 })
