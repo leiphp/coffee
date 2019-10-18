@@ -13,24 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
-    Route::get('/user', function( Request $request ){
-        return $request->user();
-    });
-
+// 公有路由，无需登录即可访问
+Route::group(['prefix' => 'v1'], function(){
+    Route::get('/user', 'API\UsersController@getUser');
     /*
-     |-------------------------------------------------------------------------------
-     | Get All Cafes
-     |-------------------------------------------------------------------------------
-     | URL:            /api/v1/cafes
-     | Controller:     API\CafesController@getCafes
-     | Method:         GET
-     | Description:    Gets all of the cafes in the application
-    */
+    |-------------------------------------------------------------------------------
+    | Get All Cafes
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cafes
+    | Controller:     API\CafesController@getCafes
+    | Method:         GET
+    | Description:    Gets all of the cafes in the application
+   */
     Route::get('/cafes', 'API\CafesController@getCafes');
 
     /*
@@ -46,6 +40,40 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
 
     /*
      |-------------------------------------------------------------------------------
+     | 获取所有冲泡方法
+     |-------------------------------------------------------------------------------
+     | 请求URL: /api/v1/brew-methods
+     | 控制器:  API\BrewMethodsController@getBrewMethods
+     | 请求方法: GET
+     | API描述: 获取应用中的所有冲泡方法
+    */
+    Route::get('/brew-methods', 'API\BrewMethodsController@getBrewMethods');
+
+    /*
+    |-------------------------------------------------------------------------------
+    | 搜索标签（自动提示/补全）
+    |-------------------------------------------------------------------------------
+    | 请求URL:            /api/v1/tags
+    | 控制器:     API\TagsController@getTags
+    | 请求方式:         GET
+    | 功能描述:   根据输入词提供标签补全功能
+    */
+    Route::get('/tags', 'API\TagsController@getTags');
+
+});
+
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+// 私有路由，需要登录才能访问
+Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
+//    Route::get('/user', function( Request $request ){
+//        return $request->user();
+//    });
+
+    /*
+     |-------------------------------------------------------------------------------
      | Adds a New Cafe
      |-------------------------------------------------------------------------------
      | URL:            /api/v1/cafes
@@ -55,16 +83,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     */
     Route::post('/cafes', 'API\CafesController@postNewCafe');
 
-    /*
-     |-------------------------------------------------------------------------------
-     | 获取所有冲泡方法
-     |-------------------------------------------------------------------------------
-     | 请求URL: /api/v1/brew-methods
-     | 控制器:  API\BrewMethodsController@getBrewMethods
-     | 请求方法: GET
-     | API描述: 获取应用中的所有冲泡方法
-    */
-    Route::get('/brew-methods', 'API\BrewMethodsController@getBrewMethods');
 
     // 喜欢咖啡店
     Route::post('/cafes/{id}/like', 'API\CafesController@postLikeCafe');
@@ -93,14 +111,5 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     */
     Route::delete('/cafes/{id}/tags/{tagID}', 'API\CafesController@deleteCafeTag');
 
-    /*
-    |-------------------------------------------------------------------------------
-    | 搜索标签（自动提示/补全）
-    |-------------------------------------------------------------------------------
-    | 请求URL:            /api/v1/tags
-    | 控制器:     API\TagsController@getTags
-    | 请求方式:         GET
-    | 功能描述:   根据输入词提供标签补全功能
-    */
-    Route::get('/tags', 'API\TagsController@getTags');
+
 });
