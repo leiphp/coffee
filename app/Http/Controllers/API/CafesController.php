@@ -22,8 +22,13 @@ class CafesController extends Controller
 
     public function getCafes()
     {
-        $cafes = Cafe::with('brewMethods')->get();
-        return response()->json( $cafes );
+        $cafes = Cafe::with('brewMethods')
+            ->with(['tags' => function ($query) {
+                $query->select('name');
+            }])
+            ->get();
+
+        return response()->json($cafes);
     }
 
     public function getCafe($id)
