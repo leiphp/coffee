@@ -3332,7 +3332,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     // 从 Vuex 中获取用户加载状态
     userLoadStatus: function userLoadStatus() {
-      return this.$store.getters.getUserLoadStatus;
+      return this.$store.getters.getUserLoadStatus();
     },
     // 从 Vuex 中获取用户信息
     user: function user() {
@@ -66020,6 +66020,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store.js */ "./resources/js/store.js");
 /*
  |-------------------------------------------------------------------------------
  | routes.js
@@ -66032,14 +66033,44 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
 /**
  * Extends Vue to use Vue Router
  */
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+function requireAuth(to, from, next) {
+  function proceed() {
+    // 如果用户信息已经加载并且不为空则说明该用户已登录，可以继续访问路由，否则跳转到首页
+    // 这个功能类似 Laravel 中的 auth 中间件
+    if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUserLoadStatus() === 2) {
+      if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser != '') {
+        next();
+      } else {
+        next('/home');
+      }
+    }
+  }
+
+  if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUserLoadStatus() !== 2) {
+    // 如果用户信息未加载完毕则先加载
+    _store_js__WEBPACK_IMPORTED_MODULE_2__["default"].dispatch('loadUser'); // 监听用户信息加载状态，加载完成后调用 proceed 方法继续后续操作
+
+    _store_js__WEBPACK_IMPORTED_MODULE_2__["default"].watch(_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUserLoadStatus, function () {
+      if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUserLoadStatus() === 2) {
+        proceed();
+      }
+    });
+  } else {
+    // 如果用户信息加载完毕直接调用 proceed 方法
+    proceed();
+  }
+}
 /**
  * Makes a new VueRouter that we will use to run all of the routes for the app.
  */
+
 
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: [{
@@ -66060,7 +66091,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     }, {
       path: 'cafes/new',
       name: 'newcafe',
-      component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('NewCafe', __webpack_require__(/*! ./pages/NewCafe.vue */ "./resources/js/pages/NewCafe.vue")["default"])
+      component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('NewCafe', __webpack_require__(/*! ./pages/NewCafe.vue */ "./resources/js/pages/NewCafe.vue")["default"]),
+      beforeEnter: requireAuth
     }, {
       path: 'cafes/:id',
       name: 'cafe',
@@ -66148,8 +66180,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! E:\githubApp\phpsystem\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! E:\githubApp\phpsystem\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! F:\github-project\phpsystem\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! F:\github-project\phpsystem\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
