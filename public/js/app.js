@@ -2169,6 +2169,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2229,40 +2265,40 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // 为所有咖啡店创建点标记
     buildMarkers: function buildMarkers() {
-      // 清空点标记数组
-      this.markers = []; // 自定义点标记图标
+      // 初始化点标记数组
+      this.markers = []; // 自定义点标记
 
       var image = _config_js__WEBPACK_IMPORTED_MODULE_0__["ROAST_CONFIG"].APP_URL + '/storage/img/coffee-marker.png';
       var icon = new AMap.Icon({
         image: image,
-        // 图像 URL
-        imageSize: new AMap.Size(19, 33) // 设置图标尺寸
+        // Icon的图像
+        imageSize: new AMap.Size(19, 33)
+      }); // 遍历所有咖啡店创建点标记
 
-      }); // 遍历所有咖啡店并为每个咖啡店创建点标记
+      var infoWindow = new AMap.InfoWindow();
 
       for (var i = 0; i < this.cafes.length; i++) {
-        // 通过高德地图 API 为每个咖啡店创建点标记并设置经纬度
+        // 为每个咖啡店创建点标记并设置经纬度
         var marker = new AMap.Marker({
           position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longitude)),
-          title: this.cafes[i].name,
+          title: this.cafes[i].location_name,
           icon: icon,
-          // 通过 icon 对象设置自定义点标记图标来替代默认蓝色图标
-          map: this.map,
           extData: {
             'cafe': this.cafes[i]
           }
-        }); // 为每个咖啡店创建信息窗体
+        }); // 自定义信息窗体
 
-        var infoWindow = new AMap.InfoWindow({
-          content: this.cafes[i].name
-        });
-        this.infoWindows.push(infoWindow); // 绑定点击事件到点标记对象，点击打开上面创建的信息窗体
+        var contentString = '<div class="cafe-info-window">' + '<div class="cafe-name">' + this.cafes[i].name + this.cafes[i].location_name + '</div>' + '<div class="cafe-address">' + '<span class="street">' + this.cafes[i].address + '</span>' + '<span class="city">' + this.cafes[i].city + '</span> ' + '<span class="state">' + this.cafes[i].state + '</span>' + '<span class="zip">' + this.cafes[i].zip + '</span>' + '<a href="/#/cafes/' + this.cafes[i].id + '">Visit</a>' + '</div>' + '</div>';
+        marker.content = contentString; // 绑定点击事件到点标记对象，点击打开上面创建的信息窗体
 
-        marker.on('click', function () {
-          infoWindow.open(this.getMap(), this.getPosition());
-        }); // 将每个点标记放到点标记数组中
+        marker.on('click', mapClick); // 将点标记放到数组中
 
         this.markers.push(marker);
+      }
+
+      function mapClick(mapEvent) {
+        infoWindow.setContent(mapEvent.target.content);
+        infoWindow.open(this.getMap(), this.getPosition());
       } // 将所有点标记显示到地图上
 
 
@@ -3701,7 +3737,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "div#cafe-map-container {\n  position: absolute;\n  top: 50px;\n  left: 0px;\n  right: 0px;\n  bottom: 50px;\n}\ndiv#cafe-map-container div#cafe-map {\n  position: absolute;\n  top: 0px;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n}", ""]);
+exports.push([module.i, "div#cafe-map-container {\n  position: absolute;\n  top: 50px;\n  left: 0px;\n  right: 0px;\n  bottom: 50px;\n}\ndiv#cafe-map-container div#cafe-map {\n  position: absolute;\n  top: 0px;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-name {\n  display: block;\n  text-align: center;\n  color: #7F5F2A;\n  font-family: \"Josefin Sans\", sans-serif;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address {\n  display: block;\n  text-align: center;\n  margin-top: 5px;\n  color: #A0A0A0;\n  font-family: \"Lato\", sans-serif;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address span.street {\n  font-size: 14px;\n  display: block;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address span.city {\n  font-size: 12px;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address span.state {\n  font-size: 12px;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address span.zip {\n  font-size: 12px;\n  display: block;\n}\ndiv#cafe-map-container div.cafe-info-window div.cafe-address a {\n  color: #FFBE54;\n  font-weight: bold;\n}", ""]);
 
 // exports
 
@@ -64779,9 +64815,8 @@ __webpack_require__.r(__webpack_exports__);
 var CafeTagsFilter = {
   methods: {
     processCafeTagsFilter: function processCafeTagsFilter(cafe, tags) {
-      console.log('cafe数据是', cafe);
-      console.log('tag数据是', tags); // 如果标签不为空则进行处理
-
+      //console.log('cafe数据是',cafe);
+      // 如果标签不为空则进行处理
       if (tags.length > 0) {
         var cafeTags = []; // 将咖啡店所有标签推送到 cafeTags 数组中
 
