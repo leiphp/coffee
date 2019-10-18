@@ -22,7 +22,7 @@
         <span v-show="cafesLoadStatus == 1">Loading</span>
         <span v-show="cafesLoadStatus == 2">Cafes loaded successfully!</span>
         <span v-show="cafesLoadStatus == 3">Cafes loaded unsuccessfully!</span>
-    
+
         <div class="grid-container">
             <div class="grid-x">
                 <div class="large-12 medium-12 small-12 columns">
