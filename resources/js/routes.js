@@ -76,6 +76,12 @@ export default new VueRouter({
                     path: 'cafes/:id',
                     name: 'cafe',
                     component: Vue.component( 'Cafe', require( './pages/Cafe.vue' ).default )
+                },
+                {
+                    path: 'profile',
+                    name: 'profile',
+                    component: Vue.component('Profile', require('./pages/Profile.vue').default),
+                    beforeEnter: requireAuth
                 }
             ]
         }

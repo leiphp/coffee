@@ -71,7 +71,16 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
 //    Route::get('/user', function( Request $request ){
 //        return $request->user();
 //    });
-
+    /*
+    |-------------------------------------------------------------------------------
+    | 更新用户个人信息
+    |-------------------------------------------------------------------------------
+    | 请求URL:     /api/v1/user
+    | 控制器方法:   API\UsersController@putUpdateUser
+    | 请求方式:     PUT
+    | 功能描述:     更新认证用户的个人信息
+    */
+    Route::put('/user', 'API\UsersController@putUpdateUser');
     /*
      |-------------------------------------------------------------------------------
      | Adds a New Cafe
