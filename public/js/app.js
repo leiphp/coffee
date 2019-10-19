@@ -3625,6 +3625,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3679,7 +3684,8 @@ __webpack_require__.r(__webpack_exports__);
           locations: this.locations,
           website: this.website,
           description: this.description,
-          roaster: this.roaster
+          roaster: this.roaster,
+          picture: this.picture
         });
       }
     },
@@ -3781,6 +3787,8 @@ __webpack_require__.r(__webpack_exports__);
       this.website = '';
       this.description = '';
       this.roaster = false;
+      this.picture = '';
+      this.$refs.photo.value = '';
       this.validations = {
         name: {
           is_valid: true,
@@ -3796,8 +3804,11 @@ __webpack_require__.r(__webpack_exports__);
           text: ''
         }
       };
-      this.addLocation();
       _event_bus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('clear-tags');
+      this.addLocation();
+    },
+    handleFileUpload: function handleFileUpload() {
+      this.picture = this.$refs.photo.files[0];
     }
   },
   watch: {
@@ -47851,6 +47862,21 @@ var render = function() {
                   }
                 })
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
+              _c("label", [
+                _vm._v("图片\n                        "),
+                _c("input", {
+                  ref: "photo",
+                  attrs: { type: "file", id: "cafe-photo" },
+                  on: {
+                    change: function($event) {
+                      return _vm.handleFileUpload()
+                    }
+                  }
+                })
+              ])
             ])
           ]),
           _vm._v(" "),
@@ -64589,14 +64615,35 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * POST /api/v1/cafes
    */
-  postAddNewCafe: function postAddNewCafe(name, locations, website, description, roaster) {
+  postAddNewCafe: function postAddNewCafe(name, locations, website, description, roaster, picture) {
+    // let formData = new FormData();
+    //
+    // formData.append('company_name', companyName);
+    // formData.append('company_id', companyID);
+    // formData.append('company_type', companyType);
+    // formData.append('subscription', subscription);
+    // formData.append('website', website);
+    // formData.append('location_name', locationName);
+    // formData.append('address', address);
+    // formData.append('city', city);
+    // formData.append('state', state);
+    // formData.append('zip', zip);
+    // formData.append('brew_methods', JSON.stringify(brewMethods));
+    // formData.append('matcha', matcha);
+    // formData.append('tea', tea);
     return axios.post(_config_js__WEBPACK_IMPORTED_MODULE_0__["ROAST_CONFIG"].API_URL + '/cafes', {
       name: name,
       locations: locations,
       website: website,
       description: description,
-      roaster: roaster
-    });
+      roaster: roaster,
+      picture: picture
+    } // {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //     }
+    // }
+    );
   },
 
   /**
@@ -65908,11 +65955,11 @@ var cafes = {
           state = _ref3.state,
           dispatch = _ref3.dispatch;
       commit('setCafeAddStatus', 1);
-      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster).then(function (response) {
-        commit('setCafeAddStatus', 2);
+      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster, data.picture).then(function (response) {
+        commit('setCafeAddedStatus', 2);
         dispatch('loadCafes');
       })["catch"](function () {
-        commit('setCafeAddStatus', 3);
+        commit('setCafeAddedStatus', 3);
       });
     },
     likeCafe: function likeCafe(_ref4, data) {

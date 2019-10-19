@@ -57,13 +57,13 @@ export const cafes = {
         addCafe({commit, state, dispatch}, data) {
             commit('setCafeAddStatus', 1);
 
-            CafeAPI.postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster)
+            CafeAPI.postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster, data.picture)
                 .then(function (response) {
-                    commit('setCafeAddStatus', 2);
+                    commit('setCafeAddedStatus', 2);
                     dispatch('loadCafes');
                 })
                 .catch(function () {
-                    commit('setCafeAddStatus', 3);
+                    commit('setCafeAddedStatus', 3);
                 });
         },
         likeCafe({commit, state}, data) {

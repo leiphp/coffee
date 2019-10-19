@@ -77,8 +77,33 @@ class CafesController extends Controller
         $parentCafe->description = $request->input('description') ?: '';
         // 添加者
         $parentCafe->added_by = $request->user()->id;
-        $parentCafe->save();
+        //$parentCafe->save();
+        #{保存上传图片到目录
+        $photo = $request->file('picture');
+        die(var_dump($photo));
+        if ($photo && $photo->isValid()) {
+            $destinationPath = storage_path('app/public/photos/' . $parentCafe->id);
 
+            // 如果目标目录不存在，则创建之
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath);
+            }
+
+            // 文件名
+            $filename = time() . '-' . $photo->getClientOriginalName();
+            // 保存文件到目标目录
+            $photo->move($destinationPath, $filename);
+
+            // 在数据库中创建新纪录保存刚刚上传的文件
+            $cafePhoto = new CafePhoto();
+
+            $cafePhoto->cafe_id = $parentCafe->id;
+            $cafePhoto->uploaded_by = Auth::user()->id;
+            $cafePhoto->file_url = $destinationPath . DIRECTORY_SEPARATOR . $filename;
+
+            $cafePhoto->save();
+        }
+        #}
         // 冲泡方法
         $brewMethods = $locations[0]['methodsAvailable'];
         // 标签信息
