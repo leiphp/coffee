@@ -52,36 +52,51 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: {name: 'home'},
+            redirect: {name: 'cafes'},
             name: 'layout',
-            component: Vue.component( 'Home', require( './pages/Layout.vue' ).default ),
+            component: Vue.component('Home', require('./layouts/Layout.vue').default),
             children: [
-                {
-                    path: 'home',
-                    name: 'home',
-                    component: Vue.component( 'Home', require( './pages/Home.vue' ).default )
-                },
                 {
                     path: 'cafes',
                     name: 'cafes',
-                    component: Vue.component( 'Cafes', require( './pages/Cafes.vue' ).default ),
+                    component: Vue.component('Home', require('./pages/Home.vue').default),
+                    children: [
+                        {
+                            path: 'new',
+                            name: 'newcafe',
+                            component: Vue.component('NewCafe', require('./pages/NewCafe.vue').default),
+                            beforeEnter: requireAuth
+                        },
+                        {
+                            path: ':id',
+                            name: 'cafe',
+                            component: Vue.component('Cafe', require('./pages/Cafe.vue').default)
+                        },
+                        {
+                            path: 'cities/:slug',
+                            name: 'city',
+                            component: Vue.component( 'City', require( './pages/City.vue' ).default)
+                        }
+                    ]
                 },
                 {
-                    path: 'cafes/new',
-                    name: 'newcafe',
-                    component: Vue.component( 'NewCafe', require( './pages/NewCafe.vue' ).default ),
-                    beforeEnter: requireAuth
-                },
-                {
-                    path: 'cafes/:id',
-                    name: 'cafe',
-                    component: Vue.component( 'Cafe', require( './pages/Cafe.vue' ).default )
+                    path: 'cafes/:id/edit',
+                    name: 'editcafe',
+                    component: Vue.component('EditCafe', require('./pages/EditCafe.vue').default),
+                    beforeEnter: requireAuth,
+                    meta: {
+                        permission: 'user'
+                    }
                 },
                 {
                     path: 'profile',
                     name: 'profile',
                     component: Vue.component('Profile', require('./pages/Profile.vue').default),
                     beforeEnter: requireAuth
+                },
+                {
+                    path: '_=_',
+                    redirect: '/'
                 }
             ]
         }

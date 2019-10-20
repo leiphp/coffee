@@ -60,6 +60,38 @@ Route::group(['prefix' => 'v1'], function(){
     */
     Route::get('/tags', 'API\TagsController@getTags');
 
+    /*
+    |-------------------------------------------------------------------------------
+    | 获取所有城市
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cities
+    | Controller:     API\CitiesController@getCities
+    | Method:         GET
+    | Description:    Get all cities
+    */
+    Route::get('/cities', 'API\CitiesController@getCities');
+
+    /*
+    |-------------------------------------------------------------------------------
+    | 获取指定城市
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cities/{slug}
+    | Controller:     API\CitiesController@getCity
+    | Method:         GET
+    | Description:    Gets an individual city
+    */
+    Route::get('/cities/{slug}', 'API\CitiesController@getCity');
+    /*
+    |-------------------------------------------------------------------------------
+    | Handles a Company Search
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/companies/search
+    | Controller:     API\CompaniesController@getCompanySearch
+    | Method:         GET
+    | Description:    Handles a search for a company.
+    */
+    Route::get('/companies/search', 'API\CompaniesController@getCompanySearch');
+
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -119,6 +151,39 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     | 功能描述:    用户从某个咖啡店上删除标签
     */
     Route::delete('/cafes/{id}/tags/{tagID}', 'API\CafesController@deleteCafeTag');
+
+    /*
+    |-------------------------------------------------------------------------------
+    | 获取待编辑咖啡店数据
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cafes/{slug}/edit
+    | Controller:     API\CafesController@getCafeEditData
+    | Method:         GET
+    | Description:    获取待编辑咖啡店数据
+    */
+    Route::get('/cafes/{id}/edit', 'API\CafesController@getCafeEditData');
+
+    /*
+    |-------------------------------------------------------------------------------
+    | 执行更新咖啡店请求
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cafes/{slug}
+    | Controller:     API\CafesController@putEditCafe
+    | Method:         PUT
+    | Description:    执行更新咖啡店请求
+    */
+    Route::put('/cafes/{id}', 'API\CafesController@putEditCafe');
+
+    /*
+    |-------------------------------------------------------------------------------
+    | 删除指定咖啡店
+    |-------------------------------------------------------------------------------
+    | URL:            /api/v1/cafes/{slug}
+    | Controller:     API\CafesController@deleteCafe
+    | Method:         DELETE
+    | Description:    删除指定咖啡店
+    */
+    Route::delete('/cafes/{id}', 'API\CafesController@deleteCafe');
 
 
 });

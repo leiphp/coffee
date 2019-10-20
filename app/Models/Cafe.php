@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cafe extends Model
 {
+    use SoftDeletes;
+
     public function brewMethods()
     {
         return $this->belongsToMany(BrewMethod::class, 'cafes_brew_methods', 'cafe_id', 'brew_method_id');
@@ -40,5 +43,10 @@ class Cafe extends Model
     public function photos()
     {
         return $this->hasMany(CafePhoto::class, 'id', 'cafe_id');
+    }
+    // 归属公司
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 }
