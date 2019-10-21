@@ -15,6 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Cafe::class => CafePolicy::class,
+        Action::class => ActionPolicy::class
     ];
 
     /**
