@@ -72718,7 +72718,8 @@ var cafes = {
       commit('setCafeAddStatus', 1);
       _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].postAddNewCafe(data.company_name, data.company_id, data.company_type, data.subscription, data.website, data.location_name, data.address, data.city, data.state, data.zip, data.brew_methods, data.matcha, data.tea).then(function (response) {
         if (typeof response.data.cafe_add_pending !== 'undefined') {
-          commit('setCafeAddedText', response.data.cafe_add_pending + ' 正在添加中!');
+          // 没有新增权限提示文本
+          commit('setCafeAddedText', response.data.cafe_add_pending + ' 审核通过后才能添加!');
         } else {
           commit('setCafeAddedText', response.data.name + ' 已经添加!');
         }
@@ -72730,9 +72731,47 @@ var cafes = {
         commit('setCafeAddStatus', 3);
       });
     },
-    likeCafe: function likeCafe(_ref4, data) {
+    editCafe: function editCafe(_ref4, data) {
       var commit = _ref4.commit,
-          state = _ref4.state;
+          state = _ref4.state,
+          dispatch = _ref4.dispatch;
+      commit('setCafeEditStatus', 1);
+      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].putEditCafe(data.id, data.company_name, data.company_id, data.company_type, data.subscription, data.website, data.location_name, data.address, data.city, data.state, data.zip, data.brew_methods, data.matcha, data.tea).then(function (response) {
+        if (typeof response.data.cafe_updates_pending !== 'undefined') {
+          // 没有修改权限提示文本
+          commit('setCafeEditText', response.data.cafe_updates_pending + ' 审核通过才能更新!');
+        } else {
+          commit('setCafeEditText', response.data.name + ' 已经编辑成功!');
+        }
+
+        commit('setCafeEditStatus', 2);
+        dispatch('loadCafes');
+      })["catch"](function (error) {
+        commit('setCafeEditStatus', 3);
+      });
+    },
+    deleteCafe: function deleteCafe(_ref5, data) {
+      var commit = _ref5.commit,
+          state = _ref5.state,
+          dispatch = _ref5.dispatch;
+      commit('setCafeDeleteStatus', 1);
+      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].deleteCafe(data.id).then(function (response) {
+        if (typeof response.data.cafe_delete_pending !== 'undefined') {
+          // 没有删除权限提示文本
+          commit('setCafeDeletedText', response.data.cafe_delete_pending + ' 审核通过才能删除!');
+        } else {
+          commit('setCafeDeletedText', '咖啡店删除成功!');
+        }
+
+        commit('setCafeDeleteStatus', 2);
+        dispatch('loadCafes');
+      })["catch"](function () {
+        commit('setCafeDeleteStatus', 3);
+      });
+    },
+    likeCafe: function likeCafe(_ref6, data) {
+      var commit = _ref6.commit,
+          state = _ref6.state;
       commit('setCafeLikeActionStatus', 1);
       _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].postLikeCafe(data.id).then(function (response) {
         commit('setCafeLikedStatus', true);
@@ -72741,9 +72780,9 @@ var cafes = {
         commit('setCafeLikeActionStatus', 3);
       });
     },
-    unlikeCafe: function unlikeCafe(_ref5, data) {
-      var commit = _ref5.commit,
-          state = _ref5.state;
+    unlikeCafe: function unlikeCafe(_ref7, data) {
+      var commit = _ref7.commit,
+          state = _ref7.state;
       commit('setCafeUnlikeActionStatus', 1);
       _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].deleteLikeCafe(data.id).then(function (response) {
         commit('setCafeLikedStatus', false);
@@ -72752,16 +72791,16 @@ var cafes = {
         commit('setCafeUnlikeActionStatus', 3);
       });
     },
-    changeCafesView: function changeCafesView(_ref6, view) {
-      var commit = _ref6.commit,
-          state = _ref6.state,
-          dispatch = _ref6.dispatch;
+    changeCafesView: function changeCafesView(_ref8, view) {
+      var commit = _ref8.commit,
+          state = _ref8.state,
+          dispatch = _ref8.dispatch;
       commit('setCafesView', view);
     },
-    orderCafes: function orderCafes(_ref7, data) {
-      var commit = _ref7.commit,
-          state = _ref7.state,
-          dispatch = _ref7.dispatch;
+    orderCafes: function orderCafes(_ref9, data) {
+      var commit = _ref9.commit,
+          state = _ref9.state,
+          dispatch = _ref9.dispatch;
       var localCafes = state.cafes;
 
       switch (data.order) {
@@ -72788,8 +72827,8 @@ var cafes = {
 
       commit('setCafes', localCafes);
     },
-    loadCafeEdit: function loadCafeEdit(_ref8, data) {
-      var commit = _ref8.commit;
+    loadCafeEdit: function loadCafeEdit(_ref10, data) {
+      var commit = _ref10.commit;
       commit('setCafeEditLoadStatus', 1);
       _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].getCafeEdit(data.id).then(function (response) {
         commit('setCafeEdit', response.data);
@@ -72797,42 +72836,6 @@ var cafes = {
       })["catch"](function () {
         commit('setCafeEdit', {});
         commit('setCafeEditLoadStatus', 3);
-      });
-    },
-    editCafe: function editCafe(_ref9, data) {
-      var commit = _ref9.commit,
-          state = _ref9.state,
-          dispatch = _ref9.dispatch;
-      commit('setCafeEditStatus', 1);
-      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].putEditCafe(data.id, data.company_name, data.company_id, data.company_type, data.subscription, data.website, data.location_name, data.address, data.city, data.state, data.zip, data.brew_methods, data.matcha, data.tea).then(function (response) {
-        if (typeof response.data.cafe_updates_pending !== 'undefined') {
-          commit('setCafeEditText', response.data.cafe_updates_pending + ' 正在编辑中!');
-        } else {
-          commit('setCafeEditText', response.data.name + ' 已经编辑成功!');
-        }
-
-        commit('setCafeEditStatus', 2);
-        dispatch('loadCafes');
-      })["catch"](function (error) {
-        commit('setCafeEditStatus', 3);
-      });
-    },
-    deleteCafe: function deleteCafe(_ref10, data) {
-      var commit = _ref10.commit,
-          state = _ref10.state,
-          dispatch = _ref10.dispatch;
-      commit('setCafeDeleteStatus', 1);
-      _api_cafe_js__WEBPACK_IMPORTED_MODULE_0__["default"].deleteCafe(data.id).then(function (response) {
-        if (typeof response.data.cafe_delete_pending !== 'undefined') {
-          commit('setCafeDeletedText', response.data.cafe_delete_pending + ' 正在删除中!');
-        } else {
-          commit('setCafeDeletedText', '咖啡店删除成功!');
-        }
-
-        commit('setCafeDeleteStatus', 2);
-        dispatch('loadCafes');
-      })["catch"](function () {
-        commit('setCafeDeleteStatus', 3);
       });
     },
     clearLikeAndUnlikeStatus: function clearLikeAndUnlikeStatus(_ref11, data) {
