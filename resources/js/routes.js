@@ -22,10 +22,42 @@ function requireAuth(to, from, next) {
         // 如果用户信息已经加载并且不为空则说明该用户已登录，可以继续访问路由，否则跳转到首页
         // 这个功能类似 Laravel 中的 auth 中间件
         if (store.getters.getUserLoadStatus() === 2) {
-            if (store.getters.getUser != '') {
-                next();
+            if (store.getters.getUser !== '') {
+                switch (to.meta.permission) {
+                    // 如果权限级别是普通用户则继续
+                    case 'user':
+                        next();
+                        break;
+
+                    // 如果权限级别是商家则需要判断用户角色是否满足
+                    case 'owner':
+                        if (store.getters.getUser.permission >= 1) {
+                            next();
+                        } else {
+                            next('/cafes');
+                        }
+                        break;
+
+                    // 如果权限级别是管理员则需要判断用户角色是否满足
+                    case 'admin':
+                        if (store.getters.getUser.permission >= 2) {
+                            next();
+                        } else {
+                            next('/cafes');
+                        }
+                        break;
+
+                    // 如果权限级别是超级管理员则需要判断用户角色是否满足
+                    case 'super-admin':
+                        if (store.getters.getUser.permission === 3) {
+                            next();
+                        } else {
+                            next('/cafes');
+                        }
+                        break;
+                }
             } else {
-                next('/home');
+                next('/');
             }
         }
     }
@@ -65,7 +97,10 @@ export default new VueRouter({
                             path: 'new',
                             name: 'newcafe',
                             component: Vue.component('NewCafe', require('./pages/NewCafe.vue').default),
-                            beforeEnter: requireAuth
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permission: 'user'
+                            }
                         },
                         {
                             path: ':id',
@@ -73,7 +108,7 @@ export default new VueRouter({
                             component: Vue.component('Cafe', require('./pages/Cafe.vue').default)
                         },
                         {
-                            path: 'cities/:slug',
+                            path: 'cities/:id',
                             name: 'city',
                             component: Vue.component( 'City', require( './pages/City.vue' ).default)
                         }
@@ -92,7 +127,10 @@ export default new VueRouter({
                     path: 'profile',
                     name: 'profile',
                     component: Vue.component('Profile', require('./pages/Profile.vue').default),
-                    beforeEnter: requireAuth
+                    beforeEnter: requireAuth,
+                    meta: {
+                        permission: 'user'
+                    }
                 },
                 {
                     path: '_=_',

@@ -2326,13 +2326,13 @@ __webpack_require__.r(__webpack_exports__);
     'latitude': {
       type: Number,
       "default": function _default() {
-        return 120.21;
+        return 30.29;
       }
     },
     'longitude': {
       type: Number,
       "default": function _default() {
-        return 30.29;
+        return 120.21;
       }
     },
     'zoom': {
@@ -2351,20 +2351,20 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.markers = [];
     this.map = new AMap.Map('cafe-map', {
-      center: [this.latitude, this.longitude],
+      center: [this.longitude, this.latitude],
       zoom: this.zoom
     });
     this.clearMarkers();
     this.buildMarkers(); // 监听位置选择事件
 
     _event_bus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$on('location-selected', function (cafe) {
-      var latLng = new AMap.LngLat(cafe.lat, cafe.lng);
+      var latLng = new AMap.LngLat(cafe.lng, cafe.lat);
       this.map.setZoom(17);
       this.map.panTo(latLng);
     }.bind(this)); // 监听城市选择事件
 
     _event_bus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$on('city-selected', function (city) {
-      var latLng = new AMap.LngLat(city.lat, city.lng);
+      var latLng = new AMap.LngLat(city.lng, city.lat);
       this.map.setZoom(11);
       this.map.panTo(latLng);
     }.bind(this));
@@ -2441,9 +2441,12 @@ __webpack_require__.r(__webpack_exports__);
         }); // 为每个咖啡店创建点标记并设置经纬度
 
         var marker = new AMap.Marker({
-          position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longitude)),
+          position: new AMap.LngLat(parseFloat(this.cafes[i].longitude), parseFloat(this.cafes[i].latitude)),
           title: this.cafes[i].location_name,
-          icon: icon
+          icon: icon,
+          extData: {
+            'cafe': this.cafes[i]
+          }
         }); // 自定义信息窗体
 
         /*var contentString = '<div class="cafe-info-window">' +
@@ -2508,47 +2511,47 @@ __webpack_require__.r(__webpack_exports__);
           var subscriptionPassed = false;
           var cityPassed = false;
 
-          if (this.processCafeTypeFilter(this.markers[i].cafe, this.activeLocationFilter)) {
+          if (this.processCafeTypeFilter(this.markers[i].getExtData().cafe, this.activeLocationFilter)) {
             typePassed = true;
           }
 
-          if (this.textSearch !== '' && this.processCafeTextFilter(this.markers[i].cafe, this.textSearch)) {
+          if (this.textSearch !== '' && this.processCafeTextFilter(this.markers[i].getExtData().cafe, this.textSearch)) {
             textPassed = true;
           } else if (this.textSearch === '') {
             textPassed = true;
           }
 
-          if (this.brewMethodsFilter.length !== 0 && this.processCafeBrewMethodsFilter(this.markers[i].cafe, this.brewMethodsFilter)) {
+          if (this.brewMethodsFilter.length !== 0 && this.processCafeBrewMethodsFilter(this.markers[i].getExtData().cafe, this.brewMethodsFilter)) {
             brewMethodsPassed = true;
           } else if (this.brewMethodsFilter.length === 0) {
             brewMethodsPassed = true;
           }
 
-          if (this.onlyLiked && this.processCafeUserLikeFilter(this.markers[i].cafe)) {
+          if (this.onlyLiked && this.processCafeUserLikeFilter(this.markers[i].getExtData().cafe)) {
             likedPassed = true;
           } else if (!this.onlyLiked) {
             likedPassed = true;
           }
 
-          if (this.hasMatcha && this.processCafeHasMatchaFilter(this.markers[i].cafe)) {
+          if (this.hasMatcha && this.processCafeHasMatchaFilter(this.markers[i].getExtData().cafe)) {
             matchaPassed = true;
           } else if (!this.hasMatcha) {
             matchaPassed = true;
           }
 
-          if (this.hasTea && this.processCafeHasTeaFilter(this.markers[i].cafe)) {
+          if (this.hasTea && this.processCafeHasTeaFilter(this.markers[i].getExtData().cafe)) {
             teaPassed = true;
           } else if (!this.hasTea) {
             teaPassed = true;
           }
 
-          if (this.hasSubscription && this.processCafeSubscriptionFilter(this.markers[i].cafe)) {
+          if (this.hasSubscription && this.processCafeSubscriptionFilter(this.markers[i].getExtData().cafe)) {
             subscriptionPassed = true;
           } else if (!this.hasSubscription) {
             subscriptionPassed = true;
           }
 
-          if (this.cityFilter !== '' && this.processCafeInCityFilter(this.markers[i].cafe, this.cityFilter)) {
+          if (this.cityFilter !== '' && this.processCafeInCityFilter(this.markers[i].getExtData().cafe, this.cityFilter)) {
             cityPassed = true;
           } else if (this.cityFilter === '') {
             cityPassed = true;
@@ -2575,7 +2578,7 @@ __webpack_require__.r(__webpack_exports__);
     '$route': function $route(to, from) {
       if (to.name === 'cafes' && from.name === 'cafe') {
         if (this.previousLat !== 0.0 && this.previousLng !== 0.0 && this.previousZoom !== '') {
-          var latLng = new AMap.LngLat(this.previousLat, this.previousLng);
+          var latLng = new AMap.LngLat(this.previousLng, this.previousLat);
           this.map.setZoom(this.previousZoom);
           this.map.panTo(latLng);
         }
@@ -2657,7 +2660,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     displayIndividualCafeMap: function displayIndividualCafeMap() {
       this.map = new AMap.Map('individual-cafe-map', {
-        center: [parseFloat(this.cafe.latitude), parseFloat(this.cafe.longitude)],
+        center: [parseFloat(this.cafe.longitude), parseFloat(this.cafe.latitude)],
         zoom: 13
       });
       var image = _config_js__WEBPACK_IMPORTED_MODULE_0__["ROAST_CONFIG"].APP_URL + '/storage/img/coffee-marker.png';
@@ -2667,7 +2670,7 @@ __webpack_require__.r(__webpack_exports__);
         imageSize: new AMap.Size(19, 33)
       });
       var marker = new AMap.Marker({
-        position: new AMap.LngLat(parseFloat(this.cafe.latitude), parseFloat(this.cafe.longitude)),
+        position: new AMap.LngLat(parseFloat(this.cafe.longitude), parseFloat(this.cafe.latitude)),
         icon: icon
       });
       this.map.add(marker);
@@ -3757,16 +3760,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     'cityFilter': function cityFilter() {
-      if (this.cityFilter != '') {
-        var slug = '';
+      if (this.cityFilter !== '') {
+        var id = '';
 
         for (var i = 0; i < this.cities.length; i++) {
           if (this.cities[i].id === this.cityFilter) {
-            slug = this.cities[i].slug;
+            id = this.cities[i].id;
           }
         }
 
-        if (slug == '') {
+        if (id == '') {
           this.$router.push({
             name: 'cafes'
           });
@@ -3774,7 +3777,7 @@ __webpack_require__.r(__webpack_exports__);
           this.$router.push({
             name: 'city',
             params: {
-              slug: slug
+              id: id
             }
           });
         }
@@ -3789,7 +3792,7 @@ __webpack_require__.r(__webpack_exports__);
         var id = '';
 
         for (var i = 0; i < this.cities.length; i++) {
-          if (this.cities[i].slug === this.$route.params.slug) {
+          if (this.cities[i].id === this.$route.params.id) {
             this.cityFilter = this.cities[i].id;
           }
         }
@@ -70635,8 +70638,8 @@ __webpack_require__.r(__webpack_exports__);
   /*
     GET   /api/v1/cities/{slug}
   */
-  getCity: function getCity(slug) {
-    return axios.get(_config_js__WEBPACK_IMPORTED_MODULE_0__["ROAST_CONFIG"].API_URL + '/cities/' + slug);
+  getCity: function getCity(id) {
+    return axios.get(_config_js__WEBPACK_IMPORTED_MODULE_0__["ROAST_CONFIG"].API_URL + '/cities/' + id);
   }
 });
 
@@ -73015,10 +73018,10 @@ var cities = {
       var commit = _ref2.commit;
       commit('setCityLoadStatus', 1);
       /*
-        Calls the API to load an individual city by slug.
+        Calls the API to load an individual city by id.
       */
 
-      _api_cities_js__WEBPACK_IMPORTED_MODULE_0__["default"].getCity(data.slug).then(function (response) {
+      _api_cities_js__WEBPACK_IMPORTED_MODULE_0__["default"].getCity(data.id).then(function (response) {
         commit('setCity', response.data);
         commit('setCityLoadStatus', 2);
       })["catch"](function () {
@@ -74213,10 +74216,45 @@ function requireAuth(to, from, next) {
     // 如果用户信息已经加载并且不为空则说明该用户已登录，可以继续访问路由，否则跳转到首页
     // 这个功能类似 Laravel 中的 auth 中间件
     if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUserLoadStatus() === 2) {
-      if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser != '') {
-        next();
+      if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser !== '') {
+        switch (to.meta.permission) {
+          // 如果权限级别是普通用户则继续
+          case 'user':
+            next();
+            break;
+          // 如果权限级别是商家则需要判断用户角色是否满足
+
+          case 'owner':
+            if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser.permission >= 1) {
+              next();
+            } else {
+              next('/cafes');
+            }
+
+            break;
+          // 如果权限级别是管理员则需要判断用户角色是否满足
+
+          case 'admin':
+            if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser.permission >= 2) {
+              next();
+            } else {
+              next('/cafes');
+            }
+
+            break;
+          // 如果权限级别是超级管理员则需要判断用户角色是否满足
+
+          case 'super-admin':
+            if (_store_js__WEBPACK_IMPORTED_MODULE_2__["default"].getters.getUser.permission === 3) {
+              next();
+            } else {
+              next('/cafes');
+            }
+
+            break;
+        }
       } else {
-        next('/home');
+        next('/');
       }
     }
   }
@@ -74256,13 +74294,16 @@ function requireAuth(to, from, next) {
         path: 'new',
         name: 'newcafe',
         component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('NewCafe', __webpack_require__(/*! ./pages/NewCafe.vue */ "./resources/js/pages/NewCafe.vue")["default"]),
-        beforeEnter: requireAuth
+        beforeEnter: requireAuth,
+        meta: {
+          permission: 'user'
+        }
       }, {
         path: ':id',
         name: 'cafe',
         component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('Cafe', __webpack_require__(/*! ./pages/Cafe.vue */ "./resources/js/pages/Cafe.vue")["default"])
       }, {
-        path: 'cities/:slug',
+        path: 'cities/:id',
         name: 'city',
         component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('City', __webpack_require__(/*! ./pages/City.vue */ "./resources/js/pages/City.vue")["default"])
       }]
@@ -74278,7 +74319,10 @@ function requireAuth(to, from, next) {
       path: 'profile',
       name: 'profile',
       component: vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('Profile', __webpack_require__(/*! ./pages/Profile.vue */ "./resources/js/pages/Profile.vue")["default"]),
-      beforeEnter: requireAuth
+      beforeEnter: requireAuth,
+      meta: {
+        permission: 'user'
+      }
     }, {
       path: '_=_',
       redirect: '/'
@@ -74374,8 +74418,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! F:\github-project\phpsystem\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! F:\github-project\phpsystem\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\githubApp\phpsystem\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\githubApp\phpsystem\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

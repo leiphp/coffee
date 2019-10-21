@@ -75,12 +75,12 @@ Route::group(['prefix' => 'v1'], function(){
     |-------------------------------------------------------------------------------
     | 获取指定城市
     |-------------------------------------------------------------------------------
-    | URL:            /api/v1/cities/{slug}
+    | URL:            /api/v1/cities/{id}
     | Controller:     API\CitiesController@getCity
     | Method:         GET
     | Description:    Gets an individual city
     */
-    Route::get('/cities/{slug}', 'API\CitiesController@getCity');
+    Route::get('/cities/{id}', 'API\CitiesController@getCity');
     /*
     |-------------------------------------------------------------------------------
     | Handles a Company Search

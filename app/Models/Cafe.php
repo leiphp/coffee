@@ -32,7 +32,7 @@ class Cafe extends Model
 
     public function userLike()
     {
-        return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id')->where('user_id', auth()->id());
+        return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id')->where('user_id', auth('api')->id());
     }
 
     public function tags()
