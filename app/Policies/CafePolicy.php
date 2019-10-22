@@ -74,5 +74,23 @@ class CafePolicy
             return false;
         }
     }
+    /**
+     * If the user is an admin they can load a company. If the user
+     * owns the company they can view the company as well.
+     *
+     * @param User $user
+     * @param Cafe $cafe
+     * @return bool
+     */
+    public function view(User $user, Cafe $cafe)
+    {
+        if ($user->permission == User::ROLE_ADMIN || $user->permission == User::ROLE_SUPER_ADMIN) {
+            return true;
+        } else if ($user->companiesOwned->contains($cafe->company_id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
