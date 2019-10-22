@@ -10,7 +10,7 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
-use App\User;
+use App\Models\User;
 use Auth;
 use App\Http\Controllers\Controller;
 
@@ -52,6 +52,6 @@ class AuthenticationController extends Controller
         Auth::login( $user );
 
         // 登录成功后将用户重定向到首页
-        return redirect('/#/home');
+        return redirect('/#/cafes');
     }
 }

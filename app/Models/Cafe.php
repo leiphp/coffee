@@ -49,4 +49,8 @@ class Cafe extends Model
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
+    public function actions()
+    {
+        return $this->hasMany(Action::class, 'cafe_id', 'id');
+    }
 }

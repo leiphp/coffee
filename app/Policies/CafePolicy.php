@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Cafe;
 use App\Models\Company;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CafePolicy
