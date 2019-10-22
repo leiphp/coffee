@@ -77,26 +77,30 @@ function requireAuth(to, from, next) {
         proceed()
     }
 }
-/**
- * Makes a new VueRouter that we will use to run all of the routes for the app.
- */
+// 基于 Vue 异步组件 + Webpack 实现路由懒加载
+function loadView(dir, view) {
+    // 注释不要去掉，对应上面 webpack 编译后的文件名
+    return () => import(/* webpackChunkName: "[request]" */ './' + dir + '/' + view + '.vue');
+}
+
+// 前端路由定义
 export default new VueRouter({
     routes: [
         {
             path: '/',
             redirect: {name: 'cafes'},
             name: 'layout',
-            component: Vue.component('Home', require('./layouts/Layout.vue').default),
+            component: loadView('layouts', 'Layout'),
             children: [
                 {
                     path: 'cafes',
                     name: 'cafes',
-                    component: Vue.component('Home', require('./pages/Home.vue').default),
+                    component: loadView('pages', 'Home'),
                     children: [
                         {
                             path: 'new',
                             name: 'newcafe',
-                            component: Vue.component('NewCafe', require('./pages/NewCafe.vue').default),
+                            component: loadView('pages', 'NewCafe'),
                             beforeEnter: requireAuth,
                             meta: {
                                 permission: 'user'
@@ -105,19 +109,19 @@ export default new VueRouter({
                         {
                             path: ':id',
                             name: 'cafe',
-                            component: Vue.component('Cafe', require('./pages/Cafe.vue').default)
+                            component: loadView('pages', 'Cafe')
                         },
                         {
                             path: 'cities/:id',
                             name: 'city',
-                            component: Vue.component( 'City', require( './pages/City.vue' ).default)
+                            component: loadView('pages', 'City')
                         }
                     ]
                 },
                 {
                     path: 'cafes/:id/edit',
                     name: 'editcafe',
-                    component: Vue.component('EditCafe', require('./pages/EditCafe.vue').default),
+                    component: loadView('pages', 'EditCafe'),
                     beforeEnter: requireAuth,
                     meta: {
                         permission: 'user'
@@ -126,7 +130,7 @@ export default new VueRouter({
                 {
                     path: 'profile',
                     name: 'profile',
-                    component: Vue.component('Profile', require('./pages/Profile.vue').default),
+                    component: loadView('pages', 'Profile'),
                     beforeEnter: requireAuth,
                     meta: {
                         permission: 'user'
@@ -141,7 +145,7 @@ export default new VueRouter({
         {
             path: '/admin',
             name: 'admin',
-            component: Vue.component('Admin', require('./layouts/Admin.vue').default),
+            component: loadView('layouts', 'Admin'),
             beforeEnter: requireAuth,
             meta: {
                 permission: 'owner'
@@ -150,7 +154,7 @@ export default new VueRouter({
                 {
                     path: 'actions',
                     name: 'admin-actions',
-                    component: Vue.component('AdminActions', require('./pages/admin/Actions.vue').default),
+                    component: loadView('pages/admin', 'Actions'),
                     meta: {
                         permission: 'owner'
                     }
@@ -158,7 +162,7 @@ export default new VueRouter({
                 {
                     path: 'companies',
                     name: 'admin-companies',
-                    component: Vue.component('AdminCompanies', require('./pages/admin/Companies.vue').default),
+                    component: loadView('pages/admin', 'Companies'),
                     meta: {
                         permission: 'owner'
                     }
@@ -166,7 +170,7 @@ export default new VueRouter({
                 {
                     path: 'companies/:id',
                     name: 'admin-company',
-                    component: Vue.component('AdminCompany', require('./pages/admin/Company.vue').default),
+                    component: loadView('pages/admin', 'Company'),
                     meta: {
                         permission: 'owner'
                     }
@@ -174,7 +178,7 @@ export default new VueRouter({
                 {
                     path: 'companies/:id/cafe/:cafeID',
                     name: 'admin-cafe',
-                    component: Vue.component('AdminCafe', require('./pages/admin/Cafe.vue').default),
+                    component: loadView('pages/admin', 'Cafe'),
                     meta: {
                         permission: 'owner'
                     }
@@ -182,7 +186,7 @@ export default new VueRouter({
                 {
                     path: 'users',
                     name: 'admin-users',
-                    component: Vue.component('AdminUsers', require('./pages/admin/Users.vue').default),
+                    component: loadView('pages/admin', 'Users'),
                     meta: {
                         permission: 'admin'
                     }
@@ -190,7 +194,7 @@ export default new VueRouter({
                 {
                     path: 'users/:id',
                     name: 'admin-user',
-                    component: Vue.component('AdminUser', require('./pages/admin/User.vue').default),
+                    component: loadView('pages/admin', 'User'),
                     meta: {
                         permission: 'admin'
                     }
@@ -198,7 +202,7 @@ export default new VueRouter({
                 {
                     path: 'brew-methods',
                     name: 'admin-brew-methods',
-                    component: Vue.component('AdminBrewMethods', require('./pages/admin/BrewMethods.vue').default),
+                    component: loadView('pages/admin', 'BrewMethods'),
                     meta: {
                         permission: 'super-admin'
                     }
@@ -206,7 +210,7 @@ export default new VueRouter({
                 {
                     path: 'brew-methods/:id',
                     name: 'admin-brew-method',
-                    component: Vue.component('AdminBrewMethod', require('./pages/admin/BrewMethod.vue').default),
+                    component: loadView('pages/admin', 'BrewMethod'),
                     meta: {
                         permission: 'super-admin'
                     }
@@ -214,7 +218,7 @@ export default new VueRouter({
                 {
                     path: 'cities',
                     name: 'admin-cities',
-                    component: Vue.component('AdminCities', require('./pages/admin/Cities.vue').default),
+                    component: loadView('pages/admin', 'Cities'),
                     meta: {
                         permission: 'super-admin'
                     }
@@ -222,7 +226,7 @@ export default new VueRouter({
                 {
                     path: 'cities/:id',
                     name: 'admin-city',
-                    component: Vue.component('AdminCity', require('./pages/admin/City.vue').default),
+                    component: loadView('pages/admin', 'City'),
                     meta: {
                         permission: 'super-admin'
                     }
@@ -235,3 +239,162 @@ export default new VueRouter({
         }
     ]
 });
+
+/**
+ * Makes a new VueRouter that we will use to run all of the routes for the app.
+ */
+// export default new VueRouter({
+//     routes: [
+//         {
+//             path: '/',
+//             redirect: {name: 'cafes'},
+//             name: 'layout',
+//             component: Vue.component('Home', require('./layouts/Layout.vue').default),
+//             children: [
+//                 {
+//                     path: 'cafes',
+//                     name: 'cafes',
+//                     component: Vue.component('Home', require('./pages/Home.vue').default),
+//                     children: [
+//                         {
+//                             path: 'new',
+//                             name: 'newcafe',
+//                             component: Vue.component('NewCafe', require('./pages/NewCafe.vue').default),
+//                             beforeEnter: requireAuth,
+//                             meta: {
+//                                 permission: 'user'
+//                             }
+//                         },
+//                         {
+//                             path: ':id',
+//                             name: 'cafe',
+//                             component: Vue.component('Cafe', require('./pages/Cafe.vue').default)
+//                         },
+//                         {
+//                             path: 'cities/:id',
+//                             name: 'city',
+//                             component: Vue.component( 'City', require( './pages/City.vue' ).default)
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     path: 'cafes/:id/edit',
+//                     name: 'editcafe',
+//                     component: Vue.component('EditCafe', require('./pages/EditCafe.vue').default),
+//                     beforeEnter: requireAuth,
+//                     meta: {
+//                         permission: 'user'
+//                     }
+//                 },
+//                 {
+//                     path: 'profile',
+//                     name: 'profile',
+//                     component: Vue.component('Profile', require('./pages/Profile.vue').default),
+//                     beforeEnter: requireAuth,
+//                     meta: {
+//                         permission: 'user'
+//                     }
+//                 },
+//                 {
+//                     path: '_=_',
+//                     redirect: '/'
+//                 }
+//             ]
+//         },
+//         {
+//             path: '/admin',
+//             name: 'admin',
+//             component: Vue.component('Admin', require('./layouts/Admin.vue').default),
+//             beforeEnter: requireAuth,
+//             meta: {
+//                 permission: 'owner'
+//             },
+//             children: [
+//                 {
+//                     path: 'actions',
+//                     name: 'admin-actions',
+//                     component: Vue.component('AdminActions', require('./pages/admin/Actions.vue').default),
+//                     meta: {
+//                         permission: 'owner'
+//                     }
+//                 },
+//                 {
+//                     path: 'companies',
+//                     name: 'admin-companies',
+//                     component: Vue.component('AdminCompanies', require('./pages/admin/Companies.vue').default),
+//                     meta: {
+//                         permission: 'owner'
+//                     }
+//                 },
+//                 {
+//                     path: 'companies/:id',
+//                     name: 'admin-company',
+//                     component: Vue.component('AdminCompany', require('./pages/admin/Company.vue').default),
+//                     meta: {
+//                         permission: 'owner'
+//                     }
+//                 },
+//                 {
+//                     path: 'companies/:id/cafe/:cafeID',
+//                     name: 'admin-cafe',
+//                     component: Vue.component('AdminCafe', require('./pages/admin/Cafe.vue').default),
+//                     meta: {
+//                         permission: 'owner'
+//                     }
+//                 },
+//                 {
+//                     path: 'users',
+//                     name: 'admin-users',
+//                     component: Vue.component('AdminUsers', require('./pages/admin/Users.vue').default),
+//                     meta: {
+//                         permission: 'admin'
+//                     }
+//                 },
+//                 {
+//                     path: 'users/:id',
+//                     name: 'admin-user',
+//                     component: Vue.component('AdminUser', require('./pages/admin/User.vue').default),
+//                     meta: {
+//                         permission: 'admin'
+//                     }
+//                 },
+//                 {
+//                     path: 'brew-methods',
+//                     name: 'admin-brew-methods',
+//                     component: Vue.component('AdminBrewMethods', require('./pages/admin/BrewMethods.vue').default),
+//                     meta: {
+//                         permission: 'super-admin'
+//                     }
+//                 },
+//                 {
+//                     path: 'brew-methods/:id',
+//                     name: 'admin-brew-method',
+//                     component: Vue.component('AdminBrewMethod', require('./pages/admin/BrewMethod.vue').default),
+//                     meta: {
+//                         permission: 'super-admin'
+//                     }
+//                 },
+//                 {
+//                     path: 'cities',
+//                     name: 'admin-cities',
+//                     component: Vue.component('AdminCities', require('./pages/admin/Cities.vue').default),
+//                     meta: {
+//                         permission: 'super-admin'
+//                     }
+//                 },
+//                 {
+//                     path: 'cities/:id',
+//                     name: 'admin-city',
+//                     component: Vue.component('AdminCity', require('./pages/admin/City.vue').default),
+//                     meta: {
+//                         permission: 'super-admin'
+//                     }
+//                 },
+//                 {
+//                     path: '_=_',
+//                     redirect: '/'
+//                 }
+//             ]
+//         }
+//     ]
+// });
